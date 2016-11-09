@@ -1,0 +1,86 @@
+{
+	"agentUrl": "http://localhost:1337/v1/agent",
+	"agentKey": "",
+  "collectInterval": 60000,
+	"fileSystemReports": [
+		"/etc/oratab",
+		"/etc/fstab"
+	],
+  "log": {
+    "error": {
+      "level": "error"
+    },
+    "console": {
+      "level": "verbose",
+      "colorize": true
+    },
+    "agent": {
+      "level": "debug"
+    }
+  },
+  "cpu": [
+    {
+      "name": "numberofcpus",
+      "active": true
+    },
+    {
+      "name": "frequency",
+      "active":  true
+    }
+  ],
+  "memory" : [
+  	{
+      "name": "available",
+      "active": true
+    },
+  	{
+      "name": "used",
+      "active": true
+    },
+    {
+    	"name": "total",
+      "active": true
+    }
+  ],
+  "swap": [
+    {
+      "name": "available",
+      "active": true
+    },
+    {
+      "name": "used",
+      "active": true
+    },
+    {
+      "name": "total",
+      "active": true
+    }
+  ],
+	"services": [
+		{
+      "service": "ASCS",
+      "active": false,
+      "instanceNumber": "00"
+    },
+		{
+      "service": "MS",
+      "active": false,
+      "instanceNumber": "00"
+    },
+		{
+      "service": "DI",
+      "active": false,
+      "instanceNumber": "00"
+    },
+		{
+      "service": "DB",
+      "active": false,
+      "instanceNumber": "00"
+    },
+		{
+      "service": "DG",
+      "active": false,
+      "instanceNumber": "00"
+    }
+	]
+}
