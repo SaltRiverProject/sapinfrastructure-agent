@@ -46,8 +46,6 @@ Socket.socket.on('connecting', function () {
   log.info('socket connecting...')
 });
 
-
-
 Socket.socket.on('reconnecting', function () {
   log.warn('socket reconnecting. Attempt #' + reconnectAttempts)
   reconnectAttempts++
@@ -62,6 +60,21 @@ Socket.socket.on('disconnect', function(){
   log.error('socket disconnected from backend!')
   Socket.disconnect()
 });
+
+
+// Socket.socket.on('agent-room-agentId', function (res) {
+  // if res.action === 'shutdown'
+    // Shutdown[res.service[0]
+    // .then(
+    // shutdown the next service
+    //  Shutdown[res.service[1]]
+    // )
+    // .then(
+    // shutdown the next service
+    //  Shutdown[res.service[1]]
+    // )
+  // }
+// })
 
 process.on('SIGINT', function() {
   console.log()
