@@ -4,6 +4,7 @@ var _  = require('lodash')
 var log = require('./logger')
 var chalk = require('chalk')
 var inquirer = require('inquirer')
+var os = require('os')
 
 var configFile = path.join(__dirname, '..', 'config.json')
 var sampleConfigFile = path.join(__dirname, '..', 'config.sample.json')
@@ -45,6 +46,12 @@ Setup = function(env) {
       name: 'agentUrl',
       message: 'What is the agent url',
       default: config.agentUrl
+    },
+    {
+      type: 'input',
+      name: 'hostname',
+      message: 'What is the hostname of this server',
+      default: os.hostname()
     },
     {
       type: 'checkbox',

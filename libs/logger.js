@@ -2,7 +2,11 @@ var winston = require('winston')
 var _ = require('lodash')
 var path = require('path')
 
-var config = require(path.join(__dirname, '..', 'config.json'))
+try {
+  var config = require(path.join(__dirname, '..', 'config.json'))
+} catch (e) {
+  
+}
 
 var _config = _.merge({}, {
   log: {

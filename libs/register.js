@@ -8,8 +8,12 @@ var axios = require('axios')
 
 var sysinfo = require('./sysinfo')
 var configFile = path.join(__dirname, '..', 'config.json')
-var config = require(configFile)
 
+try {
+  var config = require(path.join(__dirname, '..', 'config.json'))
+} catch (e) {
+
+}
 
 function writeAgentKey (agentKey) {
   if (!agentKey) {

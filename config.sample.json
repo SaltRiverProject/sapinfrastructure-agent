@@ -1,6 +1,7 @@
 {
 	"agentUrl": "http://localhost:1337/v1/agent",
 	"agentKey": "",
+  "hostname": "",
   "collectInterval": 60000,
 	"fileSystemReports": [
 		"/etc/oratab",

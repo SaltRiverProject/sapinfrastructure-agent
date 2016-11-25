@@ -9,13 +9,14 @@ var socketIOClient = require('socket.io-client')
 var sailsIOClient = require('sails.io.js')
 var io = sailsIOClient(socketIOClient)
 
-var config = require(path.join(__dirname, '..', 'config.json'))
+try {
+  var config = require(path.join(__dirname, '..', 'config.json'))
+} catch (e) {
+}
+
 io.sails.autoConnect = false
 io.sails.url = 'http://localhost:1337'
 io.sails.environment = 'production'
-io.sails.headers = {
-  'authorization': 'Bearer ' + config.agentKey
-}
 
 function runReport (self) {
   var currentDate = new Date().getTime()
@@ -83,6 +84,11 @@ Socket = {
   connected: function () {
     var self = this
     var socket = self.socket
+
+    io.sails.headers = {
+      'authorization': 'Bearer ' + config.agentKey
+    }
+
     socket.post('/v1/agent/connect', { hostname: config.hostname }, function (res, jwr) {
       _agent = res.data
       self.agent = _.merge({}, { id: _agent.id, rooms: ['agent-' + _agent.id, 'agents']})

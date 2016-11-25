@@ -4,7 +4,10 @@ var _ = require('lodash')
 var log = require('./logger')
 var Socket = require('./socket')
 
-var config = require('../config.json')
+try {
+  var config = require('../config.json')
+} catch (e) {
+}
 
 var reconnectAttempts = 0
 
