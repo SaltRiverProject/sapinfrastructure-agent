@@ -15,7 +15,6 @@ try {
 }
 
 io.sails.autoConnect = false
-io.sails.url = 'http://localhost:1337'
 io.sails.environment = 'production'
 
 function runReport (self) {
@@ -85,6 +84,7 @@ Socket = {
     var self = this
     var socket = self.socket
 
+    io.sails.url = config.baseUrl
     io.sails.headers = {
       'authorization': 'Bearer ' + config.agentKey
     }
