@@ -1,15 +1,15 @@
 #! /usr/bin/env node
 
-var program = require('commander')
-var _ = require('lodash')
+var program  = require('commander')
+var _        = require('lodash')
 
-var pkg = require('./package.json')
-var log = require('./libs/logger')
-var setup = require('./libs/setup')
+var pkg      = require('./package.json')
+var log      = require('./libs/logger')
+var setup    = require('./libs/setup')
 var register = require('./libs/register')
-var agent  = require('./libs/agent')
-
-var Socket = require('./libs/socket')
+var agent    = require('./libs/agent')
+var systemd  = require('./libs/systemd')
+var Socket   = require('./libs/socket')
 
 program
   .version(pkg.version)
@@ -26,9 +26,15 @@ program
   .action(register);
 
 program
-  .command('agent')
+  .command('run')
   .description('runs the agent')
   .action(agent);
+
+program
+  .command('systemd')
+  .description('installs the systemd scripts to run the agent as a service. (Must be ran with sudo/root)')
+  .option('-f --force', 'force overwrite of existing systemd file')
+  .action(systemd);
 
 program.parse(process.argv);
 
