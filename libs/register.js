@@ -37,7 +37,7 @@ Register = function(env) {
   .then(function (info) {
     console.log(info);
     axios
-    .post(config.agentUrl + '/register', {
+    .post(config.baseUrl + config.agentUrl + '/register', {
       hostname: info.osinfo.hostname,
       ipv4: info.ipv4,
       ipv6: info.ipv6

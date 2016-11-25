@@ -1,5 +1,6 @@
 {
-	"agentUrl": "http://localhost:1337/v1/agent",
+	"agentUrl": "/v1/agent",
+  "baseUrl": "http://localhost:1337",
 	"agentKey": "",
   "hostname": "",
   "collectInterval": 60000,
