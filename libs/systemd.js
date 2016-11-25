@@ -18,7 +18,7 @@ function systemdTemplate (_config) {
   var systemd = '[Unit]\n'
   systemd += 'Description=ESO Agent Collector\n'
   systemd += '[Service]\n'
-  systemd += 'ExecStart="' + _config.nodeBin + ' ' + _config.agentPath + '/index.js agent"\n'
+  systemd += 'ExecStart="/usr/bin/env ' + _config.nodeBin + ' ' + _config.agentPath + '/index.js agent"\n'
   systemd += 'Restart=always\n'
   systemd += 'SyslogIdentifier=esoagent\n'
   systemd += 'Environment="NODE_ENV=production" \n'
