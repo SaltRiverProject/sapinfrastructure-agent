@@ -35,7 +35,6 @@ Register = function(env) {
   sysinfo
   .collect()
   .then(function (info) {
-    console.log(info);
     axios
     .post(config.baseUrl + config.agentUrl + '/register', {
       hostname: info.osinfo.hostname,
@@ -63,8 +62,14 @@ Register = function(env) {
     })
     .catch(function (error) {
       if (error) {
-        log.error(error)
-        return reject(error)
+        switch (error.response.data.code) {
+          case 'E_AGENT_ALREADY_REGISTERED':
+            log.error(error.response.data.message)
+            break;
+          default:
+            log.error(error.response.data.message)
+            break;
+        }
       }
     })
   })

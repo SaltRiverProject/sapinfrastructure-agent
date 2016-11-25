@@ -112,6 +112,10 @@ Socket = {
    */
   connect: function () {
     var self = this
+    io.sails.url = config.baseUrl
+    io.sails.headers = {
+      'authorization': 'Bearer ' + config.agentKey
+    }
     self.socket = io.sails.connect({
         'reconnection': true,
         'reconnectionDelay': 1000,
