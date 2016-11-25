@@ -7,11 +7,10 @@ var pkg = require('./package.json')
 var log = require('./libs/logger')
 var setup = require('./libs/setup')
 var register = require('./libs/register')
+var agent  = require('./libs/agent')
+
 var Socket = require('./libs/socket')
 
-var config = require('./config.json')
-
-var reconnectAttempts = 0
 program
   .version(pkg.version)
   .command('setup')
@@ -25,58 +24,13 @@ program
   .description('registers an agent with sapinfrastructure')
   .option('-w --wait_for_activation <seconds>', 'Waits xx seconds before trying to connect')
   .action(register);
-  // .command('register', 'registers the agent to the sapinfrastructure backend')
-  // .action(register);
+
+program
+  .command('agent')
+  .description('runs the agent')
+  .action(agent);
+
 program.parse(process.argv);
-
-//connects to the backend and fires off the first report
-Socket.connect()
-
-Socket.socket.on('reconnect', function () {
-  log.info('socket reconnected!')
-  Socket.reconnect()
-  reconnectAttempts = 0
-})
-
-Socket.socket.on('connect', function(){
-  log.info('Agent connected...')
-  Socket.connected()
-  reconnectAttempts = 0
-});
-
-Socket.socket.on('connecting', function () {
-  log.info('socket connecting...')
-});
-
-Socket.socket.on('reconnecting', function () {
-  log.warn('socket reconnecting. Attempt #' + reconnectAttempts)
-  reconnectAttempts++
-})
-
-Socket.socket.on('reconnect_failed', function () {
-  log.error('socket failed to reconnect...')
-  Socket.disconnect()
-});
-
-Socket.socket.on('disconnect', function(){
-  log.error('socket disconnected from backend!')
-  Socket.disconnect()
-});
-
-
-// Socket.socket.on('agent-room-agentId', function (res) {
-  // if res.action === 'shutdown'
-    // Shutdown[res.service[0]
-    // .then(
-    // shutdown the next service
-    //  Shutdown[res.service[1]]
-    // )
-    // .then(
-    // shutdown the next service
-    //  Shutdown[res.service[1]]
-    // )
-  // }
-// })
 
 process.on('SIGINT', function() {
   console.log()

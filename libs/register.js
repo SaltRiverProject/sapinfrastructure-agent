@@ -31,9 +31,12 @@ Register = function(env) {
   sysinfo
   .collect()
   .then(function (info) {
+    console.log(info);
     axios
     .post(config.agentUrl + '/register', {
-      info
+      hostname: info.osinfo.hostname,
+      ipv4: info.ipv4,
+      ipv6: info.ipv6
     })
     .then(function (response) {
       if (response.status !== 200){
@@ -41,7 +44,7 @@ Register = function(env) {
       }
       return response
     })
-    .then(function (response) {Ω
+    .then(function (response) {
       writeAgentKey(response.data.data.agentKey)
       if (env.wait_for_activation) {
         var waitTime = parseInt(env.wait_for_activation) * 1000

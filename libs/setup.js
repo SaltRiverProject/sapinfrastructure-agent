@@ -1,6 +1,7 @@
 var fs = require('fs')
 var path = require('path')
 var _  = require('lodash')
+var log = require('./logger')
 var chalk = require('chalk')
 var inquirer = require('inquirer')
 

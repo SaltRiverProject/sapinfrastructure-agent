@@ -13,13 +13,8 @@ var config = require(path.join(__dirname, '..', 'config.json'))
 io.sails.autoConnect = false
 io.sails.url = 'http://localhost:1337'
 io.sails.environment = 'production'
-
-
-var data = {
-  headers: {
-    'authorization': 'Bearer ' + config.agentKey,
-    'host': 'SRPLEC00' // stub the host to a fake server for now
-  }
+io.sails.headers = {
+  'authorization': 'Bearer ' + config.agentKey
 }
 
 function runReport (self) {
@@ -70,7 +65,7 @@ Socket = {
         return reject('socket.report -', 'System Info not provided! Aborting report.')
       }
 
-      socket.post('/v1/agent/report', _.merge({}, data, info), function (res) {
+      socket.post('/v1/agent/report', _.merge({}, info), function (res) {
         if (res.status === 200) {
           log.debug('socket.report.post -', 'Agent report sent succesfully')
           resolve(res.data)
@@ -88,7 +83,7 @@ Socket = {
   connected: function () {
     var self = this
     var socket = self.socket
-    socket.post('/v1/agent/connect', data, function (res, jwr) {
+    socket.post('/v1/agent/connect', { hostname: config.hostname }, function (res, jwr) {
       _agent = res.data
       self.agent = _.merge({}, { id: _agent.id, rooms: ['agent-' + _agent.id, 'agents']})
       log.debug('socket.connected -', 'subscribed to agent rooms [\'' + self.agent.rooms.join('\', \'') + '\']')
