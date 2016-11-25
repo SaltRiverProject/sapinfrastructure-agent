@@ -10,17 +10,16 @@ var configFile = path.join(__dirname, '..', 'config.json')
 var sampleConfigFile = path.join(__dirname, '..', 'config.sample.json')
 
 function writeConfigFile (config, options) {
-  var configExists = fs.statSync(configFile).isFile()
+  var configExists = fs.existsSync(configFile)
   if (configExists && !options.force) {
     log.error('setup.writeConfigFile', 'Error writing to', configFile, 'file exists! Pass -f flag to overwrite.')
   } else {
-    fs.truncate(configFile, 0, function() {
-      fs.writeFile(configFile, JSON.stringify(config, null, 2), function (err) {
-        if (err) {
-          log.error('Error writing to', configFile, err)
-        }
-        log.debug('setup.writeConfigFile -', 'Config succesfully written to', configFile)
-      })
+    fs.writeFile(configFile, JSON.stringify(config, null, 2), function (err) {
+      if (err) {
+        log.error('Error writing to', configFile, err)
+        throw err
+      }
+      log.debug('setup.writeConfigFile -', 'Config succesfully written to', configFile)
     })
   }
 }
