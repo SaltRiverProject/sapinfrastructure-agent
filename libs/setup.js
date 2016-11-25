@@ -9,8 +9,6 @@ var os = require('os')
 var configFile = path.join(__dirname, '..', 'config.json')
 var sampleConfigFile = path.join(__dirname, '..', 'config.sample.json')
 
-
-var configExists = fs.statSync(configFile).isFile()
 function writeConfigFile (config, options) {
   var configExists = fs.statSync(configFile).isFile()
   if (configExists && !options.force) {
