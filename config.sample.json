@@ -3,7 +3,7 @@
   "baseUrl": "http://localhost:1337",
 	"agentKey": "",
   "hostname": "",
-  "collectInterval": 60000,
+  "collectIntervalInMs": 60000,
 	"fileSystemReports": [
 		"/etc/oratab",
 		"/etc/fstab"
