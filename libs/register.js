@@ -12,7 +12,6 @@ var configFile = path.join(__dirname, '..', 'config.json')
 try {
   var config = require(path.join(__dirname, '..', 'config.json'))
 } catch (e) {
-
 }
 
 function writeAgentKey (agentKey) {
