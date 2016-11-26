@@ -26,10 +26,6 @@ function writeConfigFile (config, options) {
 
 var Setup;
 Setup = function(env, config) {
-
-  if (!config) {
-    throw new Error('Config not passed! does the config file exist?')
-  }
   var sampleConfig = require(sampleConfigFile)
   var config = _.merge({}, sampleConfig)
 

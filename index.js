@@ -2,18 +2,19 @@
 var program  = require('commander')
 var _        = require('lodash')
 var pkg      = require('./package.json')
+
 try {
-  var config   = require('./config.json')
-  // global log
+  if (process.argv[2] !== 'setup') {
+    var config = require('./config.json')
+  }
   log          = require('./libs/logger')(config)
   var setup    = require('./libs/setup')
   var register = require('./libs/register')
   var agent    = require('./libs/agent')
-  var systemd  = require('./libs/systemd')
   var Socket   = require('./libs/socket')
 } catch (e) {
   if (e) {
-    console.error('Config file does not exist', e)
+    console.error('Config file does not exist, did you run `esoagent setup` first?')
     process.exit()
   }
 }
@@ -25,7 +26,7 @@ program
   .option('-f --force', 'force overwrite of existing config file')
   .option('-c --config_file', 'specify a config file')
   .action(function agentSetup (env) {
-    setup(env, config)
+    setup(env)
   });
 
 program
