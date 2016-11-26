@@ -13,7 +13,7 @@
       "level": "error"
     },
     "console": {
-      "level": "verbose",
+      "level": "error",
       "colorize": true
     },
     "agent": {
