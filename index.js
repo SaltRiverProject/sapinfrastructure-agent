@@ -30,11 +30,11 @@ program
   .description('runs the agent')
   .action(agent);
 
-program
-  .command('systemd')
-  .description('installs the systemd scripts to run the agent as a service. (Must be ran with sudo/root)')
-  .option('-f --force', 'force overwrite of existing systemd file')
-  .action(systemd);
+// program
+//   .command('systemd')
+//   .description('installs the systemd scripts to run the agent as a service. (Must be ran with sudo/root)')
+//   .option('-f --force', 'force overwrite of existing systemd file')
+//   .action(systemd);
 
 program.parse(process.argv);
 

@@ -4,7 +4,7 @@
   "description": "nodejs powered agent which collects system info and starts/stops services",
   "main": "index.js",
   "author": "Mike DeVita <mike.devita@srpnet.com>",
-  "license": "MIT",
+  "license": "DBAD",
   "bin": {
     "esoagent": "index.js"
   },
