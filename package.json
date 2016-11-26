@@ -1,6 +1,6 @@
 {
   "name": "sapinfrastructure-agent",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "nodejs powered agent which collects system info and starts/stops services",
   "main": "index.js",
   "author": "Mike DeVita <mike.devita@srpnet.com>",
