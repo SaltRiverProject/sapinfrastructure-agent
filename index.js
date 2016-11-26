@@ -44,12 +44,12 @@ program
     agent(config)
   });
 
-// program
-//   .command('systemd')
-//   .description('installs the systemd scripts to run the agent as a service. (Must be ran with sudo/root)')
-//   .option('-f --force', 'force overwrite of existing systemd file')
-//   .action(systemd);
-
+program
+  .command('config')
+  .description('displays the agent configuration')
+  .action(function configList() {
+    console.log(JSON.stringify(config, null, 2))
+  })
 program.parse(process.argv);
 
 process.on('SIGINT', function() {
