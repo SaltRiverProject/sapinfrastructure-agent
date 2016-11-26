@@ -26,7 +26,7 @@ function runReport (self, config) {
     } else {
       log.debug('sysinfo.collect -', 'Passing off to websocket')
       return self
-      .report(info)
+      .report(info, config)
       .then(function (result) {
         log.debug('Reported submitted.')
         log.info('Report Submitted at', moment().format('MM/DD/YYYY HH:mm:ss'))
@@ -51,7 +51,7 @@ Socket = {
    * send a report to the backend.
    * @return {Promise} resolves if the report was successful
    */
-  report: function (info) {
+  report: function (info, config) {
     var self = this
     var socket = self.socket
     return new Promise(function (resolve, reject) {
@@ -59,13 +59,13 @@ Socket = {
         return reject('socket.report -', 'System Info not provided! Aborting report.')
       }
 
-      socket.post('/v1/agent/report', _.merge({}, info), function (res) {
-        if (res.status === 200) {
-          log.debug('socket.report.post -', 'Agent report sent succesfully')
-          resolve(res.data)
-        } else {
-          return reject()
+      socket.post(config.agentUrl + '/report', _.merge({}, info), function (res) {
+        if (res.status !== 200) {
+          return reject(res.message)
         }
+
+        log.debug('socket.report.post -', 'Agent report sent succesfully')
+        resolve()
       })
     })
   },
@@ -87,7 +87,7 @@ Socket = {
       'authorization': 'Bearer ' + config.agentKey
     }
     return new Promise(function (resolve, reject) {
-      socket.post('/v1/agent/connect', { hostname: config.hostname }, function (res, jwr) {
+      socket.post(config.agentUrl + '/connect', { hostname: config.hostname }, function (res, jwr) {
         if (res.status !== 200) {
           return reject(res.message)
         }

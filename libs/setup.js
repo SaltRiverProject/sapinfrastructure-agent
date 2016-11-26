@@ -26,22 +26,20 @@ function writeConfigFile (config, options) {
 
 var Setup;
 Setup = function(env, config) {
-  var configExists = fs.existsSync(configFile)
 
   if (!config) {
     throw new Error('Config not passed! does the config file exist?')
   }
-
-  if (configExists && !env.force) {
-    log.error('Config file already exists, will not overwrite unless -f is passed.')
-    process.exit()
-  }
-
   var sampleConfig = require(sampleConfigFile)
   var config = _.merge({}, sampleConfig)
 
   var fsOptions = {
     force: false
+  }
+
+  if (fs.existsSync(configFile) && !env.force) {
+    log.error('Config file already exists, will not overwrite unless -f is passed.')
+    process.exit()
   }
 
   if (env.force) {

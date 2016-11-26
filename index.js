@@ -2,11 +2,10 @@
 var program  = require('commander')
 var _        = require('lodash')
 var pkg      = require('./package.json')
-// global log
-log          = require('./libs/logger')()
 try {
   var config   = require('./config.json')
-
+  // global log
+  log          = require('./libs/logger')(config)
   var setup    = require('./libs/setup')
   var register = require('./libs/register')
   var agent    = require('./libs/agent')
