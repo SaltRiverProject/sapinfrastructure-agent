@@ -1,14 +1,13 @@
 var _      = require('lodash')
 var Socket = require('./socket')
 
-var reconnectAttempts = 0
-
 var Agent;
 Agent = function(config) {
   if (!config) {
     throw new Error('Config not passed! does the config file exist?')
   }
 
+  var reconnectAttempts = 0
   //connects to the backend and fires off the first report
   Socket.connect(config)
   Socket.socket.on('reconnect', function () {
