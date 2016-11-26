@@ -32,6 +32,10 @@ git clone https://github.com/SaltRiverProject/sapinfrastructure-agent.git esoage
 cd esoagent;
 npm install;
 npm link; # this allows you to run the script as esoagent instead of node index.js
+```
+
+### Setup the agent
+```bash
 esoagent setup;
 esoagent register;
 esoagent run;
