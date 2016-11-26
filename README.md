@@ -22,6 +22,9 @@ You will need to first run setup, and provide the backend details, then you will
 ##Getting Started
 This assumes the agent is being installed to /opt/esoagent,
 
+###Installing from npm
+First make sure your registry for npm is set to the corporate registry. `npm set registry http://npm.srp.gov` then just run `npm install -g esoagent`
+
 ###Installing from source
 ```bash
 cd /opt;
