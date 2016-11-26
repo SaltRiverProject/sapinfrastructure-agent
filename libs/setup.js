@@ -8,25 +8,33 @@ var configFile = path.join(__dirname, '..', 'config.json')
 var sampleConfigFile = path.join(__dirname, '..', 'config.sample.json')
 
 function writeConfigFile (config, options) {
-  var configExists = fs.existsSync(configFile)
-  if (configExists && !options.force) {
-    log.error('setup.writeConfigFile', 'Error writing to', configFile, 'file exists! Pass -f flag to overwrite.')
-  } else {
-    fs.writeFile(configFile, JSON.stringify(config, null, 2), function (err) {
-      if (err) {
-        log.error('Error writing to', configFile, err)
-        throw err
-      }
-      log.debug('setup.writeConfigFile -', 'Config succesfully written to', configFile)
-    })
-  }
+  return new Promise(function (resolve, reject) {
+    var configExists = fs.existsSync(configFile)
+    if (configExists && !options.force) {
+      var err = 'setup.writeConfigFile Error writing to ' + configFile + ' file exists! Pass -f flag to overwrite.'
+      return reject(err)
+    } else {
+      fs.writeFile(configFile, JSON.stringify(config, null, 2), function (err) {
+        if (err) {
+          return reject(err)
+        }
+        resolve()
+      })
+    }
+  })
 }
 
 var Setup;
 Setup = function(env, config) {
+  var configExists = fs.existsSync(configFile)
 
   if (!config) {
     throw new Error('Config not passed! does the config file exist?')
+  }
+
+  if (configExists && !env.force) {
+    log.error('Config file already exists, will not overwrite unless -f is passed.')
+    process.exit()
   }
 
   var sampleConfig = require(sampleConfigFile)
@@ -155,6 +163,15 @@ Setup = function(env, config) {
     delete config.cpu
 
     writeConfigFile(config, fsOptions)
+    .then(function () {
+      console.log()
+      log.info('Config file written! Agent setup complete, run `esoagent register` next.')
+    })
+    .catch(function (error) {
+      if (error) {
+        log.error(error);
+      }
+    })
   })
 }
 module.exports = Setup
