@@ -1,14 +1,14 @@
-#ESO Agent
+# ESO Agent
 A node.js powered agent which runs on redhat/ubuntu systems to control SAP applications to start/stop them properly.
-##Introduction
+## Introduction
 
-##Requirements
+## Requirements
 * node.js 6.9.1
 * Ubuntu 14.04 or newer
 * Redhat/Centos 6 or newer
 
 
-##Usage
+## Usage
 The agent has a series of commands you can run the command followed by -h flag to see its options.
 
 ```
@@ -19,25 +19,26 @@ The agent has a series of commands you can run the command followed by -h flag t
 
 You will need to first run setup, and provide the backend details, then you will need to register the agent and enable it in the panel. Only then can the agent connect and run properly.
 
-##Getting Started
+## Getting Started
 This assumes the agent is being installed to /opt/esoagent,
 
-###Installing from npm
+### Installing from npm
 First make sure your registry for npm is set to the corporate registry. `npm set registry http://npm.srp.gov` then just run `npm install -g esoagent`
 
-###Installing from source
+### Installing from source
 ```bash
 cd /opt;
 git clone https://github.com/SaltRiverProject/sapinfrastructure-agent.git esoagent;
 cd esoagent;
 npm install;
-node index.js setup;
-node index.js register;
-node index.js run;
+npm link; # this allows you to run the script as esoagent instead of node index.js
+esoagent setup;
+esoagent register;
+esoagent run;
 ```
 
-##Run as a service
-###systemd
+## Run as a service
+### systemd
 The following systemd assumes you're using nvm as root user and the esoagent is installed to `/opt/apps/esoagent` path
 
 
