@@ -1,20 +1,16 @@
-var program = require('commander')
-var _ = require('lodash')
-
-var log = require('./logger')
+var _      = require('lodash')
 var Socket = require('./socket')
-
-try {
-  var config = require('../config.json')
-} catch (e) {
-}
 
 var reconnectAttempts = 0
 
 var Agent;
-Agent = function(env) {
+Agent = function(config) {
+  if (!config) {
+    throw new Error('Config not passed! does the config file exist?')
+  }
+
   //connects to the backend and fires off the first report
-  Socket.connect()
+  Socket.connect(config)
   Socket.socket.on('reconnect', function () {
     log.info('socket reconnected!')
     Socket.reconnect()
@@ -22,8 +18,13 @@ Agent = function(env) {
   })
 
   Socket.socket.on('connect', function(){
-    log.info('Agent connected...')
-    Socket.connected()
+    Socket.connected(config)
+    .catch(function (error) {
+      if (error) {
+        log.error(error)
+        process.exit()
+      }
+    })
     reconnectAttempts = 0
   });
 

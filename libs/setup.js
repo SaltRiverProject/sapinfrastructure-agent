@@ -1,10 +1,8 @@
-var fs = require('fs')
-var path = require('path')
-var _  = require('lodash')
-var log = require('./logger')
-var chalk = require('chalk')
+var fs       = require('fs')
+var path     = require('path')
+var _        = require('lodash')
 var inquirer = require('inquirer')
-var os = require('os')
+var os       = require('os')
 
 var configFile = path.join(__dirname, '..', 'config.json')
 var sampleConfigFile = path.join(__dirname, '..', 'config.sample.json')
@@ -25,7 +23,12 @@ function writeConfigFile (config, options) {
 }
 
 var Setup;
-Setup = function(env) {
+Setup = function(env, config) {
+
+  if (!config) {
+    throw new Error('Config not passed! does the config file exist?')
+  }
+
   var sampleConfig = require(sampleConfigFile)
   var config = _.merge({}, sampleConfig)
 

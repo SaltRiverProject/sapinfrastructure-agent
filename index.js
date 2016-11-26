@@ -1,15 +1,23 @@
 #! /usr/bin/env node
-
 var program  = require('commander')
 var _        = require('lodash')
-
 var pkg      = require('./package.json')
-var log      = require('./libs/logger')
-var setup    = require('./libs/setup')
-var register = require('./libs/register')
-var agent    = require('./libs/agent')
-var systemd  = require('./libs/systemd')
-var Socket   = require('./libs/socket')
+// global log
+log          = require('./libs/logger')()
+try {
+  var config   = require('./config.json')
+
+  var setup    = require('./libs/setup')
+  var register = require('./libs/register')
+  var agent    = require('./libs/agent')
+  var systemd  = require('./libs/systemd')
+  var Socket   = require('./libs/socket')
+} catch (e) {
+  if (e) {
+    console.error('Config file does not exist', e)
+    process.exit()
+  }
+}
 
 program
   .version(pkg.version)
@@ -17,18 +25,24 @@ program
   .description('sets up the agent for the first time')
   .option('-f --force', 'force overwrite of existing config file')
   .option('-c --config_file', 'specify a config file')
-  .action(setup);
+  .action(function agentSetup (env) {
+    setup(env, config)
+  });
 
 program
   .command('register')
   .description('registers an agent with sapinfrastructure')
   .option('-w --wait_for_activation <seconds>', 'Waits xx seconds before trying to connect')
-  .action(register);
+  .action(function agentRegister (env) {
+    register(env, config)
+  });
 
 program
   .command('run')
   .description('runs the agent')
-  .action(agent);
+  .action(function agentRun () {
+    agent(config)
+  });
 
 // program
 //   .command('systemd')

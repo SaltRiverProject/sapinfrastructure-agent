@@ -1,18 +1,9 @@
-var fs = require('fs')
-var path = require('path')
-var _  = require('lodash')
-
-var log = require('./logger')
-var inquirer = require('inquirer')
-var axios = require('axios')
-
-var sysinfo = require('./sysinfo')
+var fs         = require('fs')
+var path       = require('path')
+var _          = require('lodash')
+var axios      = require('axios')
+var sysinfo    = require('./sysinfo')
 var configFile = path.join(__dirname, '..', 'config.json')
-
-try {
-  var config = require(path.join(__dirname, '..', 'config.json'))
-} catch (e) {
-}
 
 function writeAgentKey (agentKey) {
   if (!agentKey) {
@@ -30,7 +21,11 @@ function writeAgentKey (agentKey) {
 }
 
 var Register;
-Register = function(env) {
+Register = function(env, config) {
+  if (!config) {
+    throw new Error('Config not passed! does the config file exist?')
+  }
+
   sysinfo
   .collect()
   .then(function (info) {

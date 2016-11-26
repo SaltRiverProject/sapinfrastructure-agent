@@ -1,7 +1,7 @@
 var fs = require('fs')
 var path = require('path')
 var _  = require('lodash')
-var log = require('./logger')
+var log = require('./logger')()
 
 var objectDiff = require('objectdiff')
 var si = require('systeminformation')

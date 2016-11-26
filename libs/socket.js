@@ -1,27 +1,21 @@
-var fs = require('fs')
-var path = require('path')
-var _  = require('lodash')
-var sysinfo = require('./sysinfo')
-var moment = require('moment')
-
-var log = require('./logger')
+var fs             = require('fs')
+var path           = require('path')
+var _              = require('lodash')
+var sysinfo        = require('./sysinfo')
+var moment         = require('moment')
 var socketIOClient = require('socket.io-client')
-var sailsIOClient = require('sails.io.js')
-var io = sailsIOClient(socketIOClient)
-
-try {
-  var config = require(path.join(__dirname, '..', 'config.json'))
-} catch (e) {
-}
+var sailsIOClient  = require('sails.io.js')
+var io             = sailsIOClient(socketIOClient)
 
 io.sails.autoConnect = false
 io.sails.environment = 'production'
 
-function runReport (self) {
-  var currentDate = new Date().getTime()
-  var nextRunDate = new Date().getTime() + config.collectInterval*1000
-
-  log.info(new moment(currentDate).format('MM/DD/YYYY HH:mm:ss'), '- Running agent report')
+function runReport (self, config) {
+  if (!config) {
+    throw new Error('Config not passed! does the config file exist?')
+  }
+  // var nextRunDate = currentDate + config.collectIntervalInMs
+  log.info(moment().format('MM/DD/YYYY HH:mm:ss'), '- Running agent report')
 
   sysinfo
   .collect()
@@ -35,8 +29,8 @@ function runReport (self) {
       .report(info)
       .then(function (result) {
         log.debug('Reported submitted.')
-        log.info('Report Submitted at', new moment(new Date().getTime()).format('MM/DD/YYYY HH:mm:ss'))
-        log.info('Next report will run in approx', config.collectInterval/60, 'minute(s) at -', new moment(nextRunDate + config.collectInterval*1000).format('MM/DD/YYYY HH:mm:ss'))
+        log.info('Report Submitted at', moment().format('MM/DD/YYYY HH:mm:ss'))
+        log.info('Next report will run', moment().add(config.collectIntervalInMs, 'ms').calendar())
       })
     }
   })
@@ -80,7 +74,11 @@ Socket = {
    * Send a POST to /v1/agent/connect
    * logs the socketId, and the agentKey to the backend
    */
-  connected: function () {
+  connected: function (config) {
+    if (!config) {
+      throw new Error('Config not passed! does the config file exist?')
+    }
+
     var self = this
     var socket = self.socket
 
@@ -88,11 +86,17 @@ Socket = {
     io.sails.headers = {
       'authorization': 'Bearer ' + config.agentKey
     }
+    return new Promise(function (resolve, reject) {
+      socket.post('/v1/agent/connect', { hostname: config.hostname }, function (res, jwr) {
+        if (res.status !== 200) {
+          return reject(res.message)
+        }
 
-    socket.post('/v1/agent/connect', { hostname: config.hostname }, function (res, jwr) {
-      _agent = res.data
-      self.agent = _.merge({}, { id: _agent.id, rooms: ['agent-' + _agent.id, 'agents']})
-      log.debug('socket.connected -', 'subscribed to agent rooms [\'' + self.agent.rooms.join('\', \'') + '\']')
+        _agent = res.data
+        self.agent = _.merge({}, { id: _agent.id, rooms: ['agent-' + _agent.id, 'agents']})
+        log.debug('socket.connected -', 'subscribed to agent rooms [\'' + self.agent.rooms.join('\', \'') + '\']')
+        resolve()
+      })
     })
   },
 
@@ -110,7 +114,11 @@ Socket = {
    * handles the connect/disconnect/reconnect
    * of the socket system to the backend.
    */
-  connect: function () {
+  connect: function (config) {
+    if (!config) {
+      throw new Error('Config not passed! does the config file exist?')
+    }
+
     var self = this
     io.sails.url = config.baseUrl
     io.sails.headers = {
@@ -122,16 +130,11 @@ Socket = {
         'reconnectionDelayMax' : 5000
     })
 
-    setTimeout(function () {
-      console.log()
-      log.debug('report will run in', config.collectInterval*0.5/60, 'minutes(s)')
-    }, config.collectInterval*1000*0.5)
-
     var timerId = setTimeout(function (){
-      runReport(self)
-    }, config.collectInterval*1000)
+      runReport(self, config)
+    }, config.collectIntervalInMs)
     self._timers.push(timerId)
-    runReport(self)
+    runReport(self, config)
   },
 
 

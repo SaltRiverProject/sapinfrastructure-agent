@@ -1,9 +1,15 @@
-var log = require('./libs/logger')
+var log = require('./libs/logger')()
 var setup = require('./libs/setup')
 var register = require('./libs/register')
 var Socket = require('./libs/socket')
 
-var config = require('./config.json')
+// try {
+//   var config = require('../config.json')
+// } catch (e) {
+//   if (e) {
+//     log.error('Config file does not exist')
+//   }
+// }
 
 module.exports = {
   di: function () {

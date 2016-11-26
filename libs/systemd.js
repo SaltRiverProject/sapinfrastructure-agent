@@ -9,10 +9,12 @@ var getos    = require('getos')
 var exec     = require('child_process').exec
 
 try {
-  var config = require(path.join(__dirname, '..', 'config.json'))
+  var config = require('../config.json')
 } catch (e) {
+  if (e) {
+    log.error('Config file does not exist')
+  }
 }
-
 
 function systemdTemplate (_config) {
   var systemd = '[Unit]\n'
