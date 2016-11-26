@@ -1,6 +1,6 @@
 {
   "name": "esoagent",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "nodejs powered agent which collects system info and starts/stops services",
   "main": "index.js",
   "author": "Mike DeVita <mike.devita@srpnet.com>",
